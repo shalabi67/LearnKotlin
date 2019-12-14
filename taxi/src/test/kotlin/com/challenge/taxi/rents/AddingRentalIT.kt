@@ -1,6 +1,7 @@
 package com.challenge.taxi.rents
 
 import com.challenge.taxi.customer.Customer
+import com.challenge.taxi.system.RentalData
 import com.challenge.taxi.unicorn.Unicorn
 import com.challenge.taxi.unicorn.UnicornUrls
 import com.fasterxml.jackson.databind.SerializationFeature
@@ -23,7 +24,7 @@ class AddingRentalIT(@Autowired val mockMvc: MockMvc) {
 
     @Test
     fun testAddingValidRental() {
-        val rental = createRental()
+        val rental = RentalData.createValidRental()
         rental.unicorn = Unicorn(1, "Pinky Pie")
 
         mockMvc.perform(post(UnicornUrls.rentalsUrl)
@@ -33,10 +34,6 @@ class AddingRentalIT(@Autowired val mockMvc: MockMvc) {
         .andExpect(status().isCreated)
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("\$.unicorn.isRented").value(true))
-    }
-
-    private fun createRental(): Rental {
-        return  Rental(unicorn = Unicorn(), customer = Customer(1))
     }
 
     private fun rentalToString(rental: Rental): String {
