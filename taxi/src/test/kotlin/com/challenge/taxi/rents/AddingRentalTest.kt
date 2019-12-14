@@ -25,7 +25,7 @@ class AddingRentalTest {
     }
 
     @Test
-    fun testAddingValidRental() {
+    fun testRentingValidUnicorn() {
         rental.unicorn = Unicorn(1, "Pinky Pie")
 
         val response = rentingSystem.rentUnicorn(rental)
@@ -37,10 +37,18 @@ class AddingRentalTest {
     }
 
     @Test
-    fun testAddingInvalidUnicorn() {
-
+    fun testRentingInvalidUnicorn() {
         val response = rentingSystem.rentUnicorn(rental)
 
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.statusCode)
+    }
+
+    @Test
+    fun testRentingNonExistingUnicorn() {
+        rental.unicorn = Unicorn(100, "Pinky Pie")
+
+        val response = rentingSystem.rentUnicorn(rental)
+
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
     }
 }
