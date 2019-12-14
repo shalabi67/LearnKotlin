@@ -20,5 +20,5 @@ data class Rental(
     var customer: Customer,
 
     var rentingDateTime: LocalDateTime = LocalDateTime.now(),
-    var returnDateTime: LocalDateTime?
+    var returnDateTime: LocalDateTime? = null
 ) {}

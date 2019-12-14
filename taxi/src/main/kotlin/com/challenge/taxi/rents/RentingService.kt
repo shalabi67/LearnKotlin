@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
+import javax.transaction.Transactional
 
 @Service
 class RentingService(val rentalRepository: RentalRepository, val unicornRepository: UnicornRepository) {
@@ -28,12 +29,17 @@ class RentingService(val rentalRepository: RentalRepository, val unicornReposito
         rental.unicorn.isRented = true
         rental.rentingDateTime = LocalDateTime.now()
 
-        return ResponseEntity.ok(rentalRepository.save(rental))
+        return ResponseEntity(addRental(rental), HttpStatus.CREATED)
     }
 
     private fun isInvalidUnicorn(unicorn: Unicorn): Boolean {
         return  unicorn.unicornId<=0 ||
                 unicorn.unicornName.trim().isEmpty() ||
                 unicorn.isRented
+    }
+
+    @Transactional
+    protected fun addRental(rental: Rental) : Rental {
+        return rentalRepository.save(rental);
     }
 }

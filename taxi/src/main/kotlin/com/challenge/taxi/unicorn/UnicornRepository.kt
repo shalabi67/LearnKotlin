@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface UnicornRepository: JpaRepository<Unicorn, Long> {
+    fun findUnicornByUnicornName(unicornName: String): Unicorn
 }
