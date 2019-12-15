@@ -52,10 +52,9 @@ class ReturnedRentalTest {
     }
 
     @Test
-    fun testRentingValidUnicorn() {
+    fun testReturnNonExitingRental() {
+        val responseEntity = rentingSystem.returnUnicorn(6)
 
-
-
-
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, responseEntity.statusCode)
     }
 }

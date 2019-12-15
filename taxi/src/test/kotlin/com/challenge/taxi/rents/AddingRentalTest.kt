@@ -44,6 +44,15 @@ class AddingRentalTest {
     }
 
     @Test
+    fun testRentingRentedUnicorn() {
+        rental.unicorn = Unicorn(1, "Pinky Pie")
+        var response = rentingSystem.rentUnicorn(rental)
+
+        response = rentingSystem.rentUnicorn(rental)
+        Assertions.assertEquals(HttpStatus.GONE, response.statusCode)
+    }
+
+    @Test
     fun testRentingNonExistingUnicorn() {
         rental.unicorn = Unicorn(100, "Pinky Pie")
 
