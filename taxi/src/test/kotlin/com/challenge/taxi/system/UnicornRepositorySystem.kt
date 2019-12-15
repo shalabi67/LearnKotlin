@@ -12,25 +12,10 @@ class UnicornRepositorySystem {
         fun create(): UnicornRepositorySystem {
             val unicornRepositorySystem = UnicornRepositorySystem()
             unicornRepositorySystem.initializeUnicornMap()
-            mockFindById(unicornRepositorySystem)
-
+            unicornRepositorySystem.mockFindById()
 
             return unicornRepositorySystem;
         }
-
-        private fun mockFindById(unicornRepositorySystem: UnicornRepositorySystem) {
-            Mockito.`when`(unicornRepositorySystem.unicornRepository.findById(anyLong())).thenAnswer{ invocationOnMock ->
-                val argument: Long = invocationOnMock.getArgument(0)
-                val unicorn = unicornRepositorySystem.unicornIdMap[argument]
-                if(unicorn == null) {
-                    Optional.empty<Unicorn>()
-                } else {
-                    Optional.of(unicorn)
-                }
-
-            }
-        }
-
     }
 
 
@@ -38,8 +23,6 @@ class UnicornRepositorySystem {
     val unicornRepository: UnicornRepository = Mockito.mock(UnicornRepository::class.java)
     private val unicornIdMap: MutableMap<Long, Unicorn> = mutableMapOf()
     private val unicornNameMap: MutableMap<String, Unicorn> = mutableMapOf()
-
-
 
     private fun initializeUnicornMap() {
         addToMap(createUnicorn(1, "Pinky Pie"))
@@ -60,5 +43,30 @@ class UnicornRepositorySystem {
         unicorn.restDuration = restDuration
 
         return unicorn
+    }
+
+    private fun mockFindById() {
+        Mockito.`when`(unicornRepository.findById(anyLong())).thenAnswer{ invocationOnMock ->
+            val argument: Long = invocationOnMock.getArgument<Long>(0)
+            val unicorn = unicornIdMap[argument]
+            if(unicorn == null) {
+                Optional.empty<Unicorn>()
+            } else {
+                Optional.of(unicorn)
+            }
+
+        }
+    }
+
+    private fun mockSave() {
+        Mockito.`when`(unicornRepository.save(any(Unicorn::class.java))).thenAnswer {
+            val unicorn: Unicorn = it.getArgument<Unicorn>(0)
+            if(unicornIdMap.containsKey(unicorn.unicornId)) {
+                unicornIdMap[unicorn.unicornId] = unicorn
+                Optional.of(unicorn)
+            } else {
+                Optional.empty<Unicorn>()
+            }
+        }
     }
 }

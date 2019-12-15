@@ -9,7 +9,11 @@ import java.time.LocalDateTime
 import javax.transaction.Transactional
 
 @Service
-class RentingService(val rentalRepository: RentalRepository, val unicornRepository: UnicornRepository) {
+class RentingService(val rentalRepository: RentalRepository,
+                     val unicornRepository: UnicornRepository,
+                     val returnedRentalRepository: ReturnedRentalRepository,
+                     val schedulerService: SchedulerService) {
+
 
     fun rent(rental: Rental): ResponseEntity<Rental> {
         if(rental.customer.customerId<0 || rental.unicorn.unicornId<=0 ) {
@@ -30,6 +34,28 @@ class RentingService(val rentalRepository: RentalRepository, val unicornReposito
         rental.rentingDateTime = LocalDateTime.now()
 
         return ResponseEntity(addRental(rental), HttpStatus.CREATED)
+    }
+
+    fun returnUnicorn(rentalId: Long): ResponseEntity<ReturnedRental> {
+        val rentalOptional = rentalRepository.findById(rentalId)
+        if(!rentalOptional.isPresent) {
+            return ResponseEntity(HttpStatus.NOT_FOUND)
+        }
+
+        return returnUnicorn(rentalOptional.get())
+    }
+
+    @Transactional
+    protected fun returnUnicorn(rental: Rental): ResponseEntity<ReturnedRental> {
+        val returnedRental = ReturnedRental(rental.rentalId, rental.unicorn, rental.customer, rental.rentingDateTime)
+
+        rentalRepository.delete(rental)
+
+        val result = ResponseEntity.ok(returnedRentalRepository.save(returnedRental))
+
+        schedulerService.enableUnicornForRenting(returnedRental.unicorn)
+
+        return result;
     }
 
     private fun isInvalidUnicorn(unicorn: Unicorn): Boolean {

@@ -6,9 +6,8 @@ import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
-data class Rental(
+data class ReturnedRental(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var rentalId: Long = -1,
 
     @ManyToOne
@@ -19,6 +18,6 @@ data class Rental(
     @JoinColumn(name="customer_id", nullable=false)
     var customer: Customer,
 
-    var rentingDateTime: LocalDateTime = LocalDateTime.now()
-
+    var rentingDateTime: LocalDateTime = LocalDateTime.now(),
+    var returnDateTime: LocalDateTime = LocalDateTime.now()
 ) {}
