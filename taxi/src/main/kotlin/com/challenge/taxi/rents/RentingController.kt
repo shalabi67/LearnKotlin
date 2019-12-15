@@ -1,6 +1,5 @@
 package com.challenge.taxi.rents
 
-import com.challenge.taxi.unicorn.Unicorn
 import com.challenge.taxi.unicorn.UnicornUrls
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*

@@ -1,6 +1,5 @@
 package com.challenge.taxi.rents
 
-import com.challenge.taxi.customer.Customer
 import com.challenge.taxi.system.RentalData
 import com.challenge.taxi.unicorn.Unicorn
 import com.challenge.taxi.unicorn.UnicornUrls

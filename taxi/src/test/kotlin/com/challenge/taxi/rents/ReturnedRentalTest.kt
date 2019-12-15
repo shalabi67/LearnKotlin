@@ -3,7 +3,6 @@ package com.challenge.taxi.rents
 import com.challenge.taxi.system.RentalData
 import com.challenge.taxi.system.RentingSystem
 import com.challenge.taxi.unicorn.Unicorn
-import com.challenge.taxi.unicorn.UnicornUrls.rental
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -12,7 +11,6 @@ import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.junit.jupiter.MockitoSettings
 import org.mockito.quality.Strictness
 import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 
 @ExtendWith(MockitoExtension::class)
 @MockitoSettings(strictness = Strictness.LENIENT)

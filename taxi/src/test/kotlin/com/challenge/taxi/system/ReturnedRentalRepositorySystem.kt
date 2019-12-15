@@ -1,13 +1,9 @@
 package com.challenge.taxi.system
 
-import com.challenge.taxi.rents.Rental
-import com.challenge.taxi.rents.RentalRepository
 import com.challenge.taxi.rents.ReturnedRental
 import com.challenge.taxi.rents.ReturnedRentalRepository
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito
-import java.time.LocalDateTime
-import java.util.*
 
 class ReturnedRentalRepositorySystem {
     companion object {
