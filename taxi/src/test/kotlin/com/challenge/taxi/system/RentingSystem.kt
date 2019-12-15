@@ -4,6 +4,7 @@ import com.challenge.taxi.rents.Rental
 import com.challenge.taxi.rents.RentingController
 import com.challenge.taxi.rents.RentingService
 import com.challenge.taxi.rents.ReturnedRental
+import com.challenge.taxi.unicorn.UnicornRepository
 import org.springframework.http.ResponseEntity
 
 class RentingSystem {
@@ -11,11 +12,11 @@ class RentingSystem {
 
         fun create(): RentingSystem {
             val rentingSystem =  RentingSystem()
-            val unicornRepository = UnicornRepositorySystem.create().unicornRepository;
+            rentingSystem.unicornRepository = UnicornRepositorySystem.create().unicornRepository;
             val rentingService = RentingService(RentalRepositorySystem.create(),
-                    unicornRepository,
+                    rentingSystem.unicornRepository,
                     ReturnedRentalRepositorySystem.create(),
-                    SchedulerSystem.create(unicornRepository).schedulerService)
+                    SchedulerSystem.create(rentingSystem.unicornRepository).schedulerService)
 
             rentingSystem.rentingController = RentingController(rentingService)
 
@@ -24,6 +25,7 @@ class RentingSystem {
     }
 
     lateinit var rentingController: RentingController
+    lateinit var unicornRepository: UnicornRepository
 
     fun rentUnicorn(rental: Rental) : ResponseEntity<Rental> {
         return rentingController.rentUnicorn(rental)

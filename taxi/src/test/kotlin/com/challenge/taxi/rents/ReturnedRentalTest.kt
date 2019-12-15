@@ -2,13 +2,17 @@ package com.challenge.taxi.rents
 
 import com.challenge.taxi.system.RentalData
 import com.challenge.taxi.system.RentingSystem
+import com.challenge.taxi.unicorn.Unicorn
 import com.challenge.taxi.unicorn.UnicornUrls.rental
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.junit.jupiter.MockitoSettings
 import org.mockito.quality.Strictness
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 
 @ExtendWith(MockitoExtension::class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -24,6 +28,36 @@ class ReturnedRentalTest {
 
     @Test
     fun testReturnedRental() {
+        rental.unicorn = Unicorn(1, "Pinky Pie")
+        val response = rentingSystem.rentUnicorn(rental)
+        Assertions.assertEquals(HttpStatus.CREATED, response.statusCode)
+        val newRental = response.body
+
+        if(newRental != null) {
+            val responseEntity = rentingSystem.returnUnicorn(newRental.rentalId)
+            Assertions.assertEquals(HttpStatus.OK, responseEntity.statusCode)
+
+            Thread.sleep(20)  //just give a chance to the scheduler to execute
+
+            val returnedRental = responseEntity.body
+            if(returnedRental != null) {
+                Assertions.assertNotNull(returnedRental)
+                val unicornOptional = rentingSystem.unicornRepository.findById(returnedRental.unicorn.unicornId)
+                Assertions.assertEquals(false, unicornOptional.get().isRented)
+            } else {
+                Assertions.fail<Long>()
+            }
+
+        } else {
+            Assertions.fail<Long>()
+        }
+    }
+
+    @Test
+    fun testRentingValidUnicorn() {
+
+
+
 
     }
 }

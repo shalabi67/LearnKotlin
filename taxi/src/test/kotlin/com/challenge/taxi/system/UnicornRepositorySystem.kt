@@ -13,6 +13,7 @@ class UnicornRepositorySystem {
             val unicornRepositorySystem = UnicornRepositorySystem()
             unicornRepositorySystem.initializeUnicornMap()
             unicornRepositorySystem.mockFindById()
+            unicornRepositorySystem.mockSave()
 
             return unicornRepositorySystem;
         }
